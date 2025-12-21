@@ -11,12 +11,17 @@ telnet 127.0.0.1 4444
 ```
 
 ### GDB method
+## Do-it-yourself
 ```
 gdb-multiarch <file name>.elf
 target remote localhost:3333  # Connect GDB client to port 3333 of OpenOCD server
 monitor reset halt            # Reset and halt the MCU
 
 load                          # Can also be used to restart the debugging session
+```
+## Running scripts
+```
+gdb-multiarch -x <path to gdb script>
 ```
 
 # Debugging notes
