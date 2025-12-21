@@ -1,0 +1,10 @@
+**/build_logs/**
+**/obj/**
+**/concept/**
+**/.vscode/**
+**/reference/**
+**/*.elf
+
+**/build/**
+**/cmake_build/**
+
