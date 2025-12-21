@@ -1,7 +1,7 @@
 set pagination off
 
 #file build/firmware.elf
-file cmake_build/test.elf
+file Release/firmware.elf
 
 target remote localhost:3333
 load

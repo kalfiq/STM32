@@ -1,24 +1,32 @@
-set(OUTPUT "test.elf")
-
-set(CMAKE_C_FLAGS "-O0 -g3")
-
-add_executable(${OUTPUT})
-
-target_sources(${OUTPUT}
-    PRIVATE
-        Logger/Logger.c
-        Utilities/Converter.c
-        Logger/RingBuffer.c
-        Main.c
+set(SOURCE_FILES
+    Logger/Logger.c
+    Logger/RingBuffer.c
+    Utilities/Converter.c
+    Main.c
 )
 
-target_include_directories(${OUTPUT}
-    PRIVATE
-        Logger
-        Utilities
+set(HEADER_PATHS
+    Logger
+    Utilities
 )
 
-target_link_libraries(${OUTPUT}
-    PRIVATE
-        stm32f722
-)
+############################################################################################
+# Get the absolute paths for the source files
+############################################################################################
+foreach(FILE ${SOURCE_FILES})
+    get_filename_component(SOURCE ${FILE} ABSOLUTE)
+    list(APPEND SOURCES ${SOURCE})
+endforeach()
+
+foreach(PATH ${HEADER_PATHS})
+    get_filename_component(HEADER ${PATH} ABSOLUTE)
+    list(APPEND HEADERS ${HEADER})
+endforeach()
+
+############################################################################################
+# Set the parent variables for final compilation and linking
+############################################################################################
+set(APP_SOURCES ${SOURCES} PARENT_SCOPE)
+set(APP_HEADERS ${HEADERS} PARENT_SCOPE)
+
+
