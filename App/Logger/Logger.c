@@ -1,7 +1,6 @@
 #include "Logger.h"
 
-char AppendToString(uint8_t* source, uint8_t newChar)
-{
+char AppendToString(uint8_t* source, uint8_t newChar) {
     if (NULL == source)
         return 1;
 
@@ -9,7 +8,7 @@ char AppendToString(uint8_t* source, uint8_t newChar)
     while (*source++)
         counter++;
 
-    // Save one byte for the null-termination character
+    /* Save one byte for a carriage return and the null-termination character */
     if (counter >= MSG_BUFF_MAX_SIZE - 1)
         return 1;
 
@@ -20,8 +19,7 @@ char AppendToString(uint8_t* source, uint8_t newChar)
 }
 
 /* Doesn't the whole ring buffer just disappear after returning? */
-void PushRingBuffer(const uint8_t* msg)
-{
+void PushRingBuffer(const uint8_t* msg) {
     struct RingBuffer ringBuff = {0};
     uint8_t buffer[15] = {0};
 
@@ -32,25 +30,21 @@ void PushRingBuffer(const uint8_t* msg)
         Push(&ringBuff, *msg++);
 }
 
-uint8_t IsFormatSpecifier(const uint8_t* format)
-{
+uint8_t IsFormatSpecifier(const uint8_t* format) {
     return ('%' == *format);
 }
 
-uint8_t NextCharIsNullTermination(const uint8_t* format)
-{
+uint8_t NextCharIsNullTermination(const uint8_t* format) {
     return ('\0' == *(format + 1));
 }
 
 // TODO: Is there a way to optimize this using some assembly magic?
-void InitializeBuffer(uint8_t* buffer, unsigned int size)
-{
+void InitializeBuffer(uint8_t* buffer, unsigned int size) {
     for (unsigned int i = 0; i < size; ++i)
         *(buffer + i) = '\0';
 }
 
-void CustomLog(const uint8_t* function, const uint8_t* format, ...)
-{
+void CustomLog(const uint8_t* function, const uint8_t* format, ...) {
     va_list args;
     uint8_t msg[BUFF_SIZE + NUM_BUFF_MAX_SIZE];
     uint8_t numBuff[NUM_BUFF_MAX_SIZE];
@@ -60,7 +54,7 @@ void CustomLog(const uint8_t* function, const uint8_t* format, ...)
     InitializeBuffer((uint8_t*)&msg, BUFF_SIZE + NUM_BUFF_MAX_SIZE);
     InitializeBuffer((uint8_t*)&numBuff, NUM_BUFF_MAX_SIZE);
 
-    /* Are the function values a waste of bytes? */
+    /* Are the function names a waste of bytes? */
     while (*function)
         AppendToString(msg, *function++);
 
@@ -69,20 +63,16 @@ void CustomLog(const uint8_t* function, const uint8_t* format, ...)
 
     va_start(args, format);
 
-    while (*format)
-    {
-        if ((!IsFormatSpecifier(format)) || (NextCharIsNullTermination(format)))
-        {
+    while (*format) {
+        if ((!IsFormatSpecifier(format)) || (NextCharIsNullTermination(format))) {
             AppendToString(msg, *format);
             format++;
             continue;
         }
 
         format++;
-        switch (*format)
-        {
-            case 'd':
-            {
+        switch (*format) {
+            case 'd': {
                 int value = va_arg(args, int);
                 IntToStr(value, numBuffPtr);
                 format++;

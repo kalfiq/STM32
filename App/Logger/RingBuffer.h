@@ -28,18 +28,21 @@ uint8_t Pop(struct RingBuffer* ringBuff);
 Capacity BuffCapacity(const struct RingBuffer* ringBuff);
 
 void PushTest(uint8_t* data);
+uint8_t PopTest();
 void ResetBuffer();
 
-/* Testing some interface */
+/* Testing some interfaces */
 typedef void (*IPush)(struct RingBuffer*, uint8_t);
 typedef uint8_t (*IPop)(struct RingBuffer*);
 
 typedef void (*TestPush)(uint8_t*);
+typedef uint8_t (*TestPop)(void);
 typedef void (*IResetBuffer)(void);
 
 typedef struct
 {
     TestPush Push;
+    TestPop Pop;
     IResetBuffer ResetBuffer;
 
     struct RingBuffer* buffer;

@@ -2,21 +2,21 @@
 
 uint8_t testBuffer[BUFF_SIZE] = {0};
 
-struct RingBuffer ringBufff =
-{
+struct RingBuffer ringBufff = {
     .buffer = testBuffer,
-    .size = BUFF_SIZE
+    .size = BUFF_SIZE,
+    .head = 0,
+    .tail = 0
 };
 
-IRingBuffer ringBuffer =
-{
+IRingBuffer ringBuffer = {
     .Push = &PushTest,
+    .Pop = &PopTest,
     .ResetBuffer = &ResetBuffer,
     .buffer = &ringBufff
 };
 
-void ResetBuffer()
-{
+void ResetBuffer() {
     for (int i = 0; i < BUFF_SIZE; ++i)
         ringBufff.buffer[i] = '\0';
 
@@ -24,13 +24,11 @@ void ResetBuffer()
     ringBufff.tail = 0;
 }
 
-void PushTest(uint8_t* data)
-{
-    while (*data)
-    {
-        if (BUFF_FULL == BuffCapacity(&ringBufff))
-            return;
+void PushTest(uint8_t* data) {
+    if (BUFF_FULL == BuffCapacity((const struct RingBuffer*)&ringBufff))
+        return;
 
+    while (*data) {
         ringBufff.buffer[ringBufff.head] = *data;
         ringBufff.head++;
 
@@ -41,9 +39,19 @@ void PushTest(uint8_t* data)
     }
 }
 
-void Push(struct RingBuffer* ringBuff, uint8_t data)
-{
-    if (NULL == ringBuff) return;
+uint8_t PopTest() {
+    const uint8_t data = ringBufff.buffer[ringBufff.tail];
+    ringBufff.tail++;
+
+    if (ringBufff.tail == BUFF_SIZE)
+        ringBufff.tail = 0;
+
+    return data;
+}
+
+void Push(struct RingBuffer* ringBuff, uint8_t data) {
+    if (NULL == ringBuff)
+        return;
 
     if (BUFF_FULL == BuffCapacity(ringBuff))
         return;
@@ -55,8 +63,7 @@ void Push(struct RingBuffer* ringBuff, uint8_t data)
         ringBuff->head = 0;
 }
 
-uint8_t Pop(struct RingBuffer* ringBuff)
-{
+uint8_t Pop(struct RingBuffer* ringBuff) {
     const uint8_t data = ringBuff->buffer[ringBuff->tail];
     ringBuff->tail++;
 
@@ -66,8 +73,7 @@ uint8_t Pop(struct RingBuffer* ringBuff)
     return data;
 }
 
-Capacity BuffCapacity(const struct RingBuffer* ringBuff)
-{
+Capacity BuffCapacity(const struct RingBuffer* ringBuff) {
     if (NULL == ringBuff)
         return ERROR;
 

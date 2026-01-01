@@ -1,95 +1,62 @@
 #include <stdio.h>
+#include <assert.h>
+#include <string.h>
 #undef NULL
 #include "RingBuffer.h"
 
-void TC_test_empty()
+void PushingEmptyBufferShouldBeOK()
 {
-    struct RingBuffer ringBuff = {0};
-    uint8_t buffer[15] = {0};
-    ringBuff.buffer = (uint8_t*)&buffer;
-    ringBuff.size = 15;
+    ringBuffer.ResetBuffer();
 
-    printf("Pushing data into buffer...\n");
-    for (uint8_t i = 0; i < 15; ++i)
-    {
-        Push(&ringBuff, i+1);
-        if (BUFF_FULL == BuffCapacity(&ringBuff))
-            printf("[%d] Buffer filled as expected...\n", ringBuff.head);
-    }
+    uint8_t buffer[BUFF_SIZE] = "This is a test buffer";
+    ringBuffer.Push((uint8_t*)&buffer);
 
-    for (uint8_t i = 0; i < 15; ++i)
-        printf("Data: %d\n", ringBuff.buffer[i]);
-
-    printf("Popping data from buffer...\n");
-    for (uint8_t i = 0; i < 15; ++i)
-    {
-        Pop(&ringBuff);
-        if (BUFF_EMPTY == BuffCapacity(&ringBuff))
-            printf("[%d] Buffer empty as expected...\n", ringBuff.tail);
-    }
+    assert(strcmp(ringBuffer.buffer->buffer, (uint8_t*)&buffer[0]) == 0);
 }
 
-void TC_test_full()
+void PushingFullBufferShouldFail()
 {
-    struct RingBuffer ringBuff = {0};
-    uint8_t buffer[15] = {0};
-    ringBuff.buffer = (uint8_t*)&buffer;
-    ringBuff.size = 15;
+    ringBuffer.ResetBuffer();
 
-    printf("Pushing data into buffer...\n");
-    for (uint8_t i = 0; i < 15; ++i)
+    uint8_t buffer[BUFF_SIZE] = "This is a test buffer";
+    uint8_t testBuffer[BUFF_SIZE] = {0};
+
+    for (uint8_t i = 0; i < BUFF_SIZE - 1; ++i)
     {
-        Push(&ringBuff, i+1);
-        if (BUFF_FULL == BuffCapacity(&ringBuff))
-            printf("[%d] Buffer filled as expected...\n", ringBuff.head);
+        testBuffer[i] = 'a';
+        ringBuffer.Push((uint8_t*)&testBuffer[i]);
     }
 
-    for (uint8_t i = 0; i < 15; ++i)
-        printf("Data: %d\n", ringBuff.buffer[i]);
+    ringBuffer.buffer->buffer = testBuffer;
+    ringBuffer.Push((uint8_t*)&buffer);
 
-    printf("Pushing data into buffer...\n");
-    for (uint8_t i = 0; i < 50; ++i)
-    {
-        Push(&ringBuff, i+1);
-        if (BUFF_FULL == BuffCapacity(&ringBuff))
-            printf("[%d] Buffer filled as expected...\n", ringBuff.head);
-    }
-
-    for (uint8_t i = 0; i < 15; ++i)
-        printf("Data: %d\n", ringBuff.buffer[i]);
+    assert(strcmp(ringBuffer.buffer->buffer, testBuffer) == 0);
+    assert(ringBuffer.buffer->head == BUFF_SIZE - 1);
 }
 
-void TC_stream()
+void StreamingBuffer()
 {
-    uint8_t logChar = 'a';
-    struct RingBuffer ringBuff = {0};
-    uint8_t buffer[15] = {0};
+    ringBuffer.ResetBuffer();
 
-    ringBuff.buffer = (uint8_t*)&buffer;
-    ringBuff.size = 15;
-
-    while (1)
+    uint8_t buffer[BUFF_SIZE] = "This is a test buffer";
+    
+    for (int i = 0; i < 2 * BUFF_SIZE; ++i)
     {
-        Push(&ringBuff, logChar++);
-        Push(&ringBuff, logChar);
-        if (logChar - 97 > 25)
-        {
-            logChar = 'a';
-            printf("\n");
-        }
+        ringBuffer.Push((uint8_t*)&buffer);
+        ringBuffer.Push((uint8_t*)&buffer);
 
-        printf("%c", Pop(&ringBuff));
+        ringBuffer.Pop();
     }
+
+    printf("%s\n", ringBuffer.buffer->buffer);
 }
 
 int main()
 {
-    //TC_Push();
-    //TC_Pop();
-    //TC_stream();
-    TC_test_full();
-    TC_test_empty(); 
+    PushingEmptyBufferShouldBeOK();
+    PushingFullBufferShouldFail();
 
+    StreamingBuffer();
 
     return 0;
 }

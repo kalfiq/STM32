@@ -11,30 +11,36 @@
 .word _sbss                     /* Start address for bss section - value defined in linker script */
 .word _ebss                     /* End address for bss section - value defined in linker script */
 
-.section .text.Reset_Handler    /* Put Reset_Handler into its own named section in .text */
-.weak Reset_Handler             /* Allow for overridng with custom implementation */
-.type Reset_Handler, %function  /* Define this symbol as a function */
+.section .text.ResetHandler    /* Put ResetHandler into its own named section in .text */
+.weak ResetHandler             /* Allow for overridng with custom implementation */
+.type ResetHandler, %function  /* Define this symbol as a function */
 
 .extern main
 
-Reset_Handler:
+/* There could be multiple sources of reset.
+ * Check chapter 5.1.1 of the user manual for more info */
+ResetHandler:
   ldr sp, =_estack
 
+  /* Copy variables from FLASH to RAM */
   ldr r0, =_sdata
   ldr r1, =_edata
   ldr r2, =_sidata
   movs r3, #0
   bl LoopCopyDataInit
 
+  /* Initialize global and static variables with zero */
   ldr r0, =_sbss
   ldr r1, =_ebss
   movs r2, #0
   bl LoopFillZerobss
 
+  bl SystemInit
+
   bl  main
   bx  lr
 
-.size Reset_Handler, .-Reset_Handler
+.size ResetHandler, .-ResetHandler
 
 .section .text.CopyDataInit
 .type CopyDataInit, %function
@@ -70,12 +76,12 @@ LoopFillZerobss:
 
   bx lr
 
-.section .text.Default_Handler,"ax",%progbits
-Default_Handler:
+.section .text.DefaultHandler,"ax",%progbits
+DefaultHandler:
 Infinite_Loop:
   b Infinite_Loop
 
-.size Default_Handler, .-Default_Handler
+.size DefaultHandler, .-DefaultHandler
 
 .section .isr_vector,"a",%progbits /* Allocate (denoted by the "a") program data (%progbits) in memory */
 .type g_pfnVectors, %object        /* Define this symbol as an object */
@@ -83,4 +89,4 @@ Infinite_Loop:
 
 g_pfnVectors:
     .word _estack                  /* Defined in the linker script */
-    .word Reset_Handler
+    .word ResetHandler

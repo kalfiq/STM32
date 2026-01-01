@@ -5,10 +5,16 @@ project(Project
     LANGUAGES C ASM
 )
 
+set(PROJECT_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+set(APP_ROOT "${PROJECT_ROOT}/App")
+set(PLATFORM_ROOT "${PROJECT_ROOT}/Platform")
+set(THIRDPARTY_ROOT "${PROJECT_ROOT}/ThirdParty")
+
 set(OUTPUT "firmware.elf")
 set(PLATFORM_SOURCES "")
 set(APP_SOURCES "")
 set(APP_HEADERS "")
+set(PLATFORM_HEADERS "")
 set(LINKER_SCRIPT "")
 set(PLATFORM_TOOLCHAIN "")
 
@@ -34,6 +40,7 @@ target_link_options(${OUTPUT}
 target_include_directories(${OUTPUT}
     PRIVATE
         ${APP_HEADERS}
+        ${PLATFORM_HEADERS}
 )
 
 include(
@@ -43,8 +50,13 @@ include(
 ############################################################################################
 # Custom flashing command
 ############################################################################################
-set(PROGRAMMER /usr/bin/openocd)
-set(PROGRAMMER_FLAGS -f ${CMAKE_CURRENT_LIST_DIR}/openocd.cfg)
+set(PROGRAMMER openocd)
+
+set(PROGRAMMER_FLAGS
+    # Set the root path for OpenOCD to traverse
+    -s ${THIRDPARTY_ROOT}/openocd/tcl
+    -f ${CMAKE_CURRENT_LIST_DIR}/openocd.cfg
+)
 
 add_custom_target(flash
     COMMAND ${PROGRAMMER} ${PROGRAMMER_FLAGS} -c "program $<TARGET_FILE:firmware.elf> verify reset exit"

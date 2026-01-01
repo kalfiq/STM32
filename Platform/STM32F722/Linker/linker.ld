@@ -1,4 +1,4 @@
-ENTRY(Reset_Handler)
+ENTRY(ResetHandler)
 
 /* Are these values defined in the datasheet? */
 _Min_Heap_Size  = 0x200;
