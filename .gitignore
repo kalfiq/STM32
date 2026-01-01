@@ -8,3 +8,6 @@
 **/build/**
 **/Debug/**
 **/Release/**
+**/TestBuild/**
+
+**/ThirdParty/**
