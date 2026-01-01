@@ -8,6 +8,7 @@ Main objectives:
 
 ## My machine
 - Ubuntu 22.04
+- Arch Linux 6.18.2-arch2-1
 
 ## Dependencies
 ```
