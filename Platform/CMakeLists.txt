@@ -14,12 +14,14 @@ if (${LOWER_VARIANT} STREQUAL "stm32f722")
     set(SOURCE_FILES
         STM32F722/Startup/Startup.s
         STM32F722/Startup/SystemInit.c
-        STM32F722/Gpio/Gpio.c
+
+        STM32F722/Drivers/Gpio/Gpio.c
+        STM32F722/Drivers/Clock/ClockConfig.c
     )
 
     set(INCLUDE_DIRS
         STM32F722/
-        STM32F722/Gpio
+        STM32F722/Drivers
     )
 
     get_filename_component(LINKER

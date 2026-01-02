@@ -1,7 +1,8 @@
-#ifndef GPIO_H
-#define GPIO_H
+#ifndef GPIOREGISTERS_H
+#define GPIOREGISTERS_H
 
 #include "MemoryMap.h"
+#include "Utilities.h"
 
 /* GPIO base addresses (absolute) */
 #define GPIOA_BASE 0x40020000U
@@ -49,7 +50,6 @@
 #define GPIO_GPIOx_AFRH(base) ((volatile unsigned int*)((base) + 0x24))
 
 #define PA08_PIN (3U)
-#define PA08_0   (16U)
-#define PA08_1   (17U)
+#define PA08     (16U)
 
 #endif

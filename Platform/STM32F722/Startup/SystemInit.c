@@ -1,13 +1,8 @@
-#include "RccMap.h"
-#include "Gpio.h"
+#include "Clock/ClockConfig.h"
+#include "Gpio/Gpio.h"
 
 /* Reference link: https://www.linkedin.com/pulse/stm32-clock-configuration-bare-metal-deep-dive-gheorghe-prelipcean-9jivf */
 
-#define REG_WRITE(reg, value)       (*reg = value)
-#define SET_BIT(reg, bitPos)        (*reg |= (1U << bitPos))
-#define CLEAR_BIT(reg, bitPos)      (*reg &= ~(1U << bitPos))
-#define CHECK_BIT(reg, bitPos)      (*reg & (1U << bitPos))
- 
 static inline void ResetRcc() {
     /* HSI on and default trim */
     SET_BIT(RCC_CR, HSI_ON);
@@ -51,44 +46,23 @@ static inline void SwitchToSysclk() {
 }
 
 static inline void ConfigureMCO1() {
-    /* Turn HSE on */
-    SET_BIT(RCC_CR, HSE_ON);
-    while (!CHECK_BIT(RCC_CR, HSE_RDY));
+    Clock_SetHSESource();
 
-    /* Enable GPIOA clock */
-    SET_BIT(RCC_AHB1ENR, GPIOA_EN);
-
-    /* Configure PA8 as MCO1 */
-    CLEAR_BIT(GPIO_GPIOA_MODER, PA08_0);
-    CLEAR_BIT(GPIO_GPIOA_MODER, PA08_1);
-
-    SET_BIT(GPIO_GPIOA_MODER, PA08_1);
+    Clock_EnablePortxClock(GPIOA_CLOCK);
+    GPIO_SetAlternateMode();
 
     /* Set to push-pull */
-    CLEAR_BIT(GPIO_GPIOA_OTYPER, 8);
+    GPIO_SetToPushPull();
 
     /* Set pin to very high speed */
-    SET_BIT(GPIO_GPIOA_OSPEEDR, 16);
-    SET_BIT(GPIO_GPIOA_OSPEEDR, 17);
+    GPIO_SetHighSpeed();
 
-    CLEAR_BIT(GPIO_GPIOA_PUPDR, 16);
-    CLEAR_BIT(GPIO_GPIOA_PUPDR, 17);
+    GPIO_SetNoPullUpPullDown();
 
     /* Configure MCO1 output source */
-    CLEAR_BIT(GPIO_GPIOx_AFRH(GPIOA_BASE), 0);
-    CLEAR_BIT(GPIO_GPIOx_AFRH(GPIOA_BASE), 1);
-    CLEAR_BIT(GPIO_GPIOx_AFRH(GPIOA_BASE), 2);
-    CLEAR_BIT(GPIO_GPIOx_AFRH(GPIOA_BASE), 3);
+    GPIO_SetPA8();
 
-    /* Set MCO1 as the clock output with HSE */
-    CLEAR_BIT(RCC_CFGR, MCO_0);
-    SET_BIT(RCC_CFGR, MCO_1);
-
-    /* Adjust pre-scalers for MCO1 */
-    CLEAR_BIT(RCC_CFGR, MCO_PRE_0);
-    CLEAR_BIT(RCC_CFGR, MCO_PRE_1);
-    CLEAR_BIT(RCC_CFGR, MCO_PRE_2);
-
+    Clock_SetMCO1Output();
 }
 
 void SystemInit() {

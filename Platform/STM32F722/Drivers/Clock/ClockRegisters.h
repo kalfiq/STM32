@@ -1,7 +1,8 @@
-#ifndef RCC_MAP_H
-#define RCC_MAP_H
+#ifndef CLOCKREGISTERS_H
+#define CLOCKREGISTERS_H
 
 #include "MemoryMap.h"
+#include "Utilities.h"
 
 /* Chapter 5.3.27 of user manual : RCC register map */
 
@@ -45,7 +46,17 @@
 /* Offset 0x68 reserved */
 /* Offset 0x6C reserved */
 
-
+typedef enum {
+    GPIOA_CLOCK = 0,
+    GPIOB_CLOCK,
+    GPIOC_CLOCK,
+    GPIOD_CLOCK,
+    GPIOE_CLOCK,
+    GPIOF_CLOCK,
+    GPIOG_CLOCK,
+    GPIOH_CLOCK,
+    GPIOI_CLOCK
+} GPIOx_CLOCK;
 
 /* CR */
 #define HSI_ON     (0U)
@@ -64,15 +75,8 @@
 #define HSI_CLK_0  (0U)
 #define HSI_CLK_1  (1U)
 
-#define MCO_0      (21U)
-#define MCO_1      (22U)
+#define MCO        (21U)
 
-#define MCO_PRE_0  (24U)
-#define MCO_PRE_1  (25U)
-#define MCO_PRE_2  (26U)
-
-/* AHB1ENR */
-#define GPIOA_EN   (0U)
-#define GPIOB_EN   (1U)
+#define MCO_PRE    (24U)
 
 #endif
