@@ -3,22 +3,22 @@
 #include <string.h>
 #undef NULL
 
-#include "Logger.h"
+#include "logger.h"
 
-typedef void (*funcPtr)(void);
+typedef void (*func_ptr)(void);
 
-void AppendingToEmptyBufferShouldSucceed()
+void appending_to_empty_buffer_should_succeed()
 {
     uint8_t source[MSG_BUFF_MAX_SIZE] = {0};
     uint8_t newChar = 'a';
 
-    char ret = AppendToString((uint8_t*)&source, newChar);
+    char ret = append_to_string((uint8_t*)&source, newChar);
 
     assert(ret == 0);
     assert(strcmp(source, "a") == 0);
 }
 
-void AppendingToFullBufferShouldFail()
+void appending_to_full_buffer_should_fail()
 {
     uint8_t source[MSG_BUFF_MAX_SIZE] = {0};
     uint8_t expected[MSG_BUFF_MAX_SIZE] = {0};
@@ -27,23 +27,23 @@ void AppendingToFullBufferShouldFail()
     (void)memset((void*)&source, 'a', sizeof(source) - 1);
     (void)memset((void*)&expected, 'a', sizeof(source) - 1);
 
-    char ret = AppendToString((uint8_t*)&source, newChar);
+    char ret = append_to_string((uint8_t*)&source, newChar);
 
     assert(ret == 1);
     assert(strcmp(source, expected) == 0);
 }
 
-void AppendingToNullSourceShouldFail()
+void appending_null_source_should_fail()
 {
     uint8_t* source = NULL;
     uint8_t newChar = 'b';
 
-    char ret = AppendToString(source, newChar);
+    char ret = append_to_string(source, newChar);
 
     assert(ret == 1);
 }
 
-void AppendingSpecialCharacterShouldSucceed()
+void appending_special_character_should_succeed()
 {
     uint8_t source[MSG_BUFF_MAX_SIZE] = {0};
     uint8_t expected[MSG_BUFF_MAX_SIZE] = {0};
@@ -55,18 +55,18 @@ void AppendingSpecialCharacterShouldSucceed()
 
     expected[MSG_BUFF_MAX_SIZE - 2] = newChar; 
 
-    char ret = AppendToString((uint8_t*)&source, newChar);
+    char ret = append_to_string((uint8_t*)&source, newChar);
 
     assert(ret == 0);
     assert(strcmp(source, expected) == 0);
 }
 
-void Append()
+void append()
 {
     uint8_t source[MSG_BUFF_MAX_SIZE] = "This is a test message";
     uint8_t newChar = '3';
 
-    char ret = AppendToString(source, newChar);
+    char ret = append_to_string(source, newChar);
 
     assert(ret == 0);
 }
@@ -90,37 +90,37 @@ void PassingArgumentsInTheWrongOrder()
 
 #endif
 
-void FormatSpecifierReturnsTrue()
+void format_specifier_returns_true()
 {
-    uint8_t ret = IsFormatSpecifier("%");
+    uint8_t ret = is_format_specifier("%");
 
     assert(ret == 1);
 }
 
-void NonFormatSpecifierReturnsFalse()
+void non_format_specifier_returns_false()
 {
-    uint8_t ret = IsFormatSpecifier("d");
+    uint8_t ret = is_format_specifier("d");
 
     assert(ret == 0);
 }
 
-void NextCharNullTerminateReturnsTrue()
+void next_char_null_termination_returns_true()
 {
     uint8_t buff[3] = {0};
-    uint8_t ret = NextCharIsNullTermination((const char*)&buff[0]);
+    uint8_t ret = next_char_is_null_termination((const char*)&buff[0]);
 
     assert(ret == 1);
 }
 
-void NextCharNotNullTerminateReturnsFalse()
+void next_char_not_null_termination_returns_false()
 {
     uint8_t buff[3] = "ab";
-    uint8_t ret = NextCharIsNullTermination((const char*)&buff[0]);
+    uint8_t ret = next_char_is_null_termination((const char*)&buff[0]);
 
     assert(ret == 0);
 }
 
-void ValidCustomLogStringWithSingleIntAtTheEnd()
+void valid_custom_log_string_with_single_int_at_the_end()
 {
     ringBuffer.ResetBuffer();
 
@@ -129,7 +129,7 @@ void ValidCustomLogStringWithSingleIntAtTheEnd()
     LOG((const uint8_t*)&string, 1);
 }
 
-void ValidCustomLogStringWithSingleIntInTheMiddle()
+void valid_custom_log_string_with_single_int_in_the_middle()
 {
     ringBuffer.ResetBuffer();
 
@@ -139,7 +139,7 @@ void ValidCustomLogStringWithSingleIntInTheMiddle()
     printf("%s\n", ringBuffer.buffer->buffer);
 }
 
-void ValidCustomLogStringWithDoubleIntAtTheEnd()
+void valid_custom_log_string_with_double_int_at_the_end()
 {
     ringBuffer.ResetBuffer();
 
@@ -149,7 +149,7 @@ void ValidCustomLogStringWithDoubleIntAtTheEnd()
     printf("%s\n", ringBuffer.buffer->buffer);
 }
 
-void ValidCustomLogStringWithDoubleIntInTheMiddle()
+void valid_custom_log_stirng_with_double_int_in_the_middle()
 {
     ringBuffer.ResetBuffer();
 
@@ -159,7 +159,7 @@ void ValidCustomLogStringWithDoubleIntInTheMiddle()
     printf("%s\n", ringBuffer.buffer->buffer);
 }
 
-void CustomLogWithSingleArgument()
+void custom_log_with_single_argument()
 {
     ringBuffer.ResetBuffer();
 
@@ -170,38 +170,38 @@ void CustomLogWithSingleArgument()
 }
 
 /* Possible to consider benchmarking each function */
-void Run(funcPtr function)
+void run(func_ptr function)
 {
     function();
 }
 
 int main()
 {
-    funcPtr functions[] =
+    func_ptr functions[] =
     {
-        &AppendingToEmptyBufferShouldSucceed,
-        &AppendingToFullBufferShouldFail,
-        &AppendingToNullSourceShouldFail,
-        &AppendingSpecialCharacterShouldSucceed,
-        &Append,
+        &appending_to_empty_buffer_should_succeed,
+        &appending_to_full_buffer_should_fail,
+        &appending_null_source_should_fail,
+        &appending_special_character_should_succeed,
+        &append,
 
-        &FormatSpecifierReturnsTrue,
-        &NonFormatSpecifierReturnsFalse,
-        &NextCharNullTerminateReturnsTrue,
-        &NextCharNotNullTerminateReturnsFalse,
+        &format_specifier_returns_true,
+        &non_format_specifier_returns_false,
+        &next_char_null_termination_returns_true,
+        &next_char_not_null_termination_returns_false,
 
-        &ValidCustomLogStringWithSingleIntAtTheEnd,
-        &ValidCustomLogStringWithSingleIntInTheMiddle,
-        &ValidCustomLogStringWithDoubleIntAtTheEnd,
-        &ValidCustomLogStringWithDoubleIntInTheMiddle,
+        &valid_custom_log_string_with_single_int_at_the_end,
+        &valid_custom_log_string_with_single_int_in_the_middle,
+        &valid_custom_log_string_with_double_int_at_the_end,
+        &valid_custom_log_stirng_with_double_int_in_the_middle,
 
-        &CustomLogWithSingleArgument
+        &custom_log_with_single_argument
     };
 
     int count = sizeof(functions)/sizeof(functions[0]);
 
     for (int i = 0; i < count; ++i)
-        Run(functions[i]);
+        run(functions[i]);
 
     return 0;
 }

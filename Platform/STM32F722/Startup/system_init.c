@@ -1,9 +1,9 @@
-#include "Clock/ClockConfig.h"
-#include "Gpio/Gpio.h"
+#include "clock/clock_config.h"
+#include "gpio/gpio.h"
 
 /* Reference link: https://www.linkedin.com/pulse/stm32-clock-configuration-bare-metal-deep-dive-gheorghe-prelipcean-9jivf */
 
-static inline void ResetRcc() {
+static inline void reset_rcc() {
     /* HSI on and default trim */
     SET_BIT(RCC_CR, HSI_ON);
     while (!CHECK_BIT(RCC_CR, HSI_RDY));
@@ -23,56 +23,56 @@ static inline void ResetRcc() {
 
 }
 
-static inline void SetVoltage() {
+static inline void set_voltage() {
 
 }
 
-static inline void SetFlashLatency() {
+static inline void set_flash_latency() {
     /* 1. Insert wait states to allow sufficient time for FLASH to fetch next instruction
      * 2. Enable instuction cache, data cache, and pre-fetch buffer for optimizing performance */
 
 }
 
-static inline void StartHSE() {
+static inline void start_hse() {
 
 }
 
-static inline void ConfigurePLL() {
+static inline void configure_pll() {
 
 }
 
-static inline void SwitchToSysclk() {
+static inline void switch_to_sysclk() {
 
 }
 
-static inline void ConfigureMCO1() {
-    Clock_SetHSESource();
+static inline void configure_mco1() {
+    clock_set_hse_source();
 
-    Clock_EnablePortxClock(GPIOA_CLOCK);
-    GPIO_SetAlternateMode();
+    clock_enable_portx_clock(GPIOA_CLOCK);
+    gpio_set_alternade_mode();
 
     /* Set to push-pull */
-    GPIO_SetToPushPull();
+    gpio_set_to_push_pull();
 
     /* Set pin to very high speed */
-    GPIO_SetHighSpeed();
+    gpio_set_high_speed();
 
-    GPIO_SetNoPullUpPullDown();
+    gpio_set_no_pull_up_pull_down();
 
     /* Configure MCO1 output source */
-    GPIO_SetPA8();
+    gpio_set_pa8();
 
-    Clock_SetMCO1Output();
+    clock_set_mco1_output();
 }
 
-void SystemInit() {
+void system_init() {
    /* This is the general sequence for setting up the clock */
-    //ResetRcc();
-//    SetVoltage();
-//    SetFlashLatency();
-//    StartHSE();
-//    ConfigurePLL();
-//    SwitchToSysclk();
+    //reset_rcc();
+//    set_voltage();
+//    set_flash_latency();
+//    start_hse();
+//    configure_pll();
+//    switch_to_sysclk();
 
-    ConfigureMCO1();
+    configure_mco1();
 }

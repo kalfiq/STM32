@@ -9,7 +9,7 @@ void PushingEmptyBufferShouldBeOK()
     ringBuffer.ResetBuffer();
 
     uint8_t buffer[BUFF_SIZE] = "This is a test buffer";
-    ringBuffer.Push((uint8_t*)&buffer);
+    ringBuffer.push((uint8_t*)&buffer);
 
     assert(strcmp(ringBuffer.buffer->buffer, (uint8_t*)&buffer[0]) == 0);
 }
@@ -24,11 +24,11 @@ void PushingFullBufferShouldFail()
     for (uint8_t i = 0; i < BUFF_SIZE - 1; ++i)
     {
         testBuffer[i] = 'a';
-        ringBuffer.Push((uint8_t*)&testBuffer[i]);
+        ringBuffer.push((uint8_t*)&testBuffer[i]);
     }
 
     ringBuffer.buffer->buffer = testBuffer;
-    ringBuffer.Push((uint8_t*)&buffer);
+    ringBuffer.push((uint8_t*)&buffer);
 
     assert(strcmp(ringBuffer.buffer->buffer, testBuffer) == 0);
     assert(ringBuffer.buffer->head == BUFF_SIZE - 1);
@@ -42,10 +42,10 @@ void StreamingBuffer()
     
     for (int i = 0; i < 2 * BUFF_SIZE; ++i)
     {
-        ringBuffer.Push((uint8_t*)&buffer);
-        ringBuffer.Push((uint8_t*)&buffer);
+        ringBuffer.push((uint8_t*)&buffer);
+        ringBuffer.push((uint8_t*)&buffer);
 
-        ringBuffer.Pop();
+        ringBuffer.pop();
     }
 
     printf("%s\n", ringBuffer.buffer->buffer);

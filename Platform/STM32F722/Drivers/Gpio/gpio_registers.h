@@ -1,8 +1,8 @@
 #ifndef GPIOREGISTERS_H
 #define GPIOREGISTERS_H
 
-#include "MemoryMap.h"
-#include "Utilities.h"
+#include "memory_map.h"
+#include "utilities.h"
 
 /* GPIO base addresses (absolute) */
 #define GPIOA_BASE 0x40020000U

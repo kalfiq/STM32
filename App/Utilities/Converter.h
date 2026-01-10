@@ -4,6 +4,6 @@
 /* Enforce compiler flags here in case they are missed in Makefile */
 #pragma GCC diagnostic error "-Wconversion"
 
-int IntToStr(int N, unsigned char* str);
+int int_to_str(int n, unsigned char* str);
 
 #endif

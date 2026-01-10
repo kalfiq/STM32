@@ -1,13 +1,13 @@
 set(SOURCE_FILES
-    Logger/Logger.c
-    Logger/RingBuffer.c
-    Utilities/Converter.c
-    Main.c
+    logger/logger.c
+    logger/ring_buffer.c
+    utilities/converter.c
+    main.c
 )
 
 set(HEADER_PATHS
-    Logger
-    Utilities
+    logger
+    utilities
 )
 
 ############################################################################################
@@ -28,5 +28,4 @@ endforeach()
 ############################################################################################
 set(APP_SOURCES ${SOURCES} PARENT_SCOPE)
 set(APP_HEADERS ${HEADERS} PARENT_SCOPE)
-
 

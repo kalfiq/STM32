@@ -21,8 +21,8 @@ set(PLATFORM_TOOLCHAIN "")
 ############################################################################################
 # Configure the variant handling to get the source files, linkers, and toolchains
 ############################################################################################
-add_subdirectory(App)
-add_subdirectory(Platform)
+add_subdirectory(app)
+add_subdirectory(platform)
 
 ############################################################################################
 # Compile and link the variant sources
@@ -33,14 +33,14 @@ add_executable(${OUTPUT}
 )
 
 target_link_options(${OUTPUT}
-    PRIVATE
-        "-T${LINKER_SCRIPT}"
+PRIVATE
+    "-T${LINKER_SCRIPT}"
 )
 
 target_include_directories(${OUTPUT}
-    PRIVATE
-        ${APP_HEADERS}
-        ${PLATFORM_HEADERS}
+PRIVATE
+    ${APP_HEADERS}
+    ${PLATFORM_HEADERS}
 )
 
 include(

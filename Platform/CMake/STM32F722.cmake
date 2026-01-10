@@ -18,4 +18,3 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 endif ()
 
 add_compile_definitions(STM32F722)
-

@@ -1,32 +1,32 @@
-#include "Clock/ClockConfig.h"
+#include "clock/clock_config.h"
 
-void Clock_SetHSESource() {
+void clock_set_hse_source() {
     SET_BIT(RCC_CR, HSE_ON);
     while (!CHECK_BIT(RCC_CR, HSE_RDY));
 }
 
-void Clock_SetHSISource() {
+void clock_set_hsi_source() {
 
 }
 
-void Clock_SetPLLSource() {
+void clock_set_pll_source() {
 
 }
 
-void Clock_SetMCO1Output() {
+void clock_set_mco1_output() {
     WRITE_VALUE(RCC_CFGR, MCO, 0x2);
 }
 
-void Clock_SetMCO2Output() {
+void clock_set_mco2_output() {
 
 }
 
-void Clock_SetPrescaler() {
+void clock_set_prescaler() {
     CLEAR_VALUE(RCC_CFGR, MCO_PRE, 0x7);
 }
 
-void Clock_EnablePortxClock(GPIOx_CLOCK portClock) {
-    switch (portClock) {
+void clock_enable_portx_clock(GPIOx_CLOCK port_clock) {
+    switch (port_clock) {
         case GPIOA_CLOCK:
         case GPIOB_CLOCK:
         case GPIOC_CLOCK:
@@ -41,9 +41,9 @@ void Clock_EnablePortxClock(GPIOx_CLOCK portClock) {
             return;
     }
 
-    SET_BIT(RCC_AHB1ENR, portClock);
+    SET_BIT(RCC_AHB1ENR, port_clock);
 }
 
-void Clock_DisablePortxClock(GPIOx_CLOCK portClock) {
+void clock_disable_portx_clock(GPIOx_CLOCK port_clock) {
 
 }
