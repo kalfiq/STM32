@@ -10,3 +10,11 @@ function prepare_openocd() {
 function prepare_generic() {
     sudo pacman -S git cmake --needed
 }
+
+function ubuntu_prepare() {
+    sudo apt install cmake
+
+    # For bootstrapping bootstrap
+    sudo apt install libtool pkg-config jimctl
+    sudo apt install autoconf automake texinfo libusb
+}

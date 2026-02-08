@@ -4,8 +4,8 @@
 /* Enforce compiler flags here in case they are missed in Makefile */
 #pragma GCC diagnostic error "-Wint-conversion"
 
-#include "ring_buffer.h"
-#include "converter.h"
+#include "RingBuffer.h"
+#include "Converter.h"
 
 #include <stdarg.h>
 #include <stdlib.h>

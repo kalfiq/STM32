@@ -12,25 +12,25 @@ endif ()
 ############################################################################################
 if (${LOWER_VARIANT} STREQUAL "stm32f722")
     set(SOURCE_FILES
-        stm32f722/startup/startup.s
-        stm32f722/startup/system_init.c
+        STM32F722/Startup/Startup.s
+        STM32F722/Startup/SystemInit.c
 
-        stm32f722/drivers/gpio/gpio.c
-        stm32f722/drivers/clock/clock_config.c
+        STM32F722/Drivers/Gpio/Gpio.c
+        STM32F722/Drivers/Clock/ClockConfig.c
     )
 
     set(INCLUDE_DIRS
-        stm32f722/
-        stm32f722/drivers
+        STM32F722/
+        STM32F722/Drivers
     )
 
     get_filename_component(LINKER
-        stm32f722/linker/linker.ld
+        STM32F722/Linker/Linker.ld
         ABSOLUTE
     )
 
     get_filename_component(TOOLCHAIN
-        cmake/stm32f722.cmake
+        CMake/STM32F722.cmake
         ABSOLUTE
     )
 elseif (${LOWER_VARIANT} STREQUAL "atmel328p")

@@ -3,7 +3,7 @@
 #include <string.h>
 #undef NULL
 
-#include "logger.h"
+#include "Logger.h"
 
 typedef void (*func_ptr)(void);
 

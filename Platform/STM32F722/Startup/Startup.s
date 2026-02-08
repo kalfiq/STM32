@@ -11,15 +11,15 @@
 .word _sbss                     /* Start address for bss section - value defined in linker script */
 .word _ebss                     /* End address for bss section - value defined in linker script */
 
-.section .text.reset_handler    /* Put reset_handler into its own named section in .text */
-.weak reset_handler             /* Allow for overridng with custom implementation */
-.type reset_handler, %function  /* Define this symbol as a function */
+.section .text.ResetHandler    /* Put ResetHandler into its own named section in .text */
+.weak ResetHandler             /* Allow for overridng with custom implementation */
+.type ResetHandler, %function  /* Define this symbol as a function */
 
 .extern main
 
 /* There could be multiple sources of reset.
  * Check chapter 5.1.1 of the user manual for more info */
-reset_handler:
+ResetHandler:
   ldr sp, =_estack
 
   /* Copy variables from FLASH to RAM */
@@ -27,61 +27,61 @@ reset_handler:
   ldr r1, =_edata
   ldr r2, =_sidata
   movs r3, #0
-  bl loop_copy_data_init
+  bl LoopCopyDataInit
 
   /* Initialize global and static variables with zero */
   ldr r0, =_sbss
   ldr r1, =_ebss
   movs r2, #0
-  bl loop_fill_zero_bss
+  bl LoopFillZeroBss
 
-  bl system_init
+  bl SystemInit /* Defined in SystemInit.c */
 
   bl  main
   bx  lr
 
-.size reset_handler, .-reset_handler
+.size ResetHandler, .-ResetHandler
 
-.section .text.copy_data_init
-.type copy_data_init, %function
+.section .text.CopyDataInit
+.type CopyDataInit, %function
 
-.section .text.loop_copy_data_init
-.type loop_copy_data_init, %function
+.section .text.LoopCopyDataInit
+.type LoopCopyDataInit, %function
 
-copy_data_init:
+CopyDataInit:
   ldr r4, [r2, r3]
   str r4, [r0, r3]
   adds r3, r3, #4
   adds r0, r0, r3
 
-loop_copy_data_init:
+LoopCopyDataInit:
   cmp r0, r1
-  bcc copy_data_init
+  bcc CopyDataInit
 
   bx lr
 
-.section .text.fill_zero_bss
-.type fill_zero_bss, %function
+.section .text.FillZeroBss
+.type FillZeroBss, %function
 
-.section .text.loop_fill_zero_bss
-.type loop_fill_zero_bss, %function
+.section .text.LoopFillZeroBss
+.type LoopFillZeroBss, %function
 
-fill_zero_bss:
+FillZeroBss:
   str  r2, [r0]
   adds r0, r0, #4
 
-loop_fill_zero_bss:
+LoopFillZeroBss:
   cmp r0, r1
-  bcc fill_zero_bss
+  bcc FillZeroBss
 
   bx lr
 
-.section .text.default_handler,"ax",%progbits
-default_handler:
-infinite_loop:
-  b infinite_loop
+.section .text.DefaultHandler,"ax",%progbits
+DefaultHandler:
+InfiniteLoop:
+  b InfiniteLoop
 
-.size default_handler, .-default_handler
+.size DefaultHandler, .-DefaultHandler
 
 .section .isr_vector,"a",%progbits /* Allocate (denoted by the "a") program data (%progbits) in memory */
 .type g_pfnVectors, %object        /* Define this symbol as an object */
@@ -89,4 +89,4 @@ infinite_loop:
 
 g_pfnVectors:
     .word _estack                  /* Defined in the linker script */
-    .word reset_handler
+    .word ResetHandler

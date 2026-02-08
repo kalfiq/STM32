@@ -1,13 +1,13 @@
 set(SOURCE_FILES
-    logger/logger.c
-    logger/ring_buffer.c
-    utilities/converter.c
-    main.c
+    Logger/Logger.c
+    Logger/RingBuffer.c
+    Utilities/Converter.c
+    Main.c
 )
 
 set(HEADER_PATHS
-    logger
-    utilities
+    Logger
+    Utilities
 )
 
 ############################################################################################

@@ -21,8 +21,8 @@ set(PLATFORM_TOOLCHAIN "")
 ############################################################################################
 # Configure the variant handling to get the source files, linkers, and toolchains
 ############################################################################################
-add_subdirectory(app)
-add_subdirectory(platform)
+add_subdirectory(App)
+add_subdirectory(Platform)
 
 ############################################################################################
 # Compile and link the variant sources

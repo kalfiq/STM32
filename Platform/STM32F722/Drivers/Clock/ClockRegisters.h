@@ -1,8 +1,8 @@
 #ifndef CLOCKREGISTERS_H
 #define CLOCKREGISTERS_H
 
-#include "memory_map.h"
-#include "utilities.h"
+#include "MemoryMap.h"
+#include "Utilities.h"
 
 /* Chapter 5.3.27 of user manual : RCC register map */
 

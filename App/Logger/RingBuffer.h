@@ -23,13 +23,13 @@ typedef enum
     BUFF_OK
 } Capacity;
 
-void push(struct RingBuffer* ringBuff, uint8_t data);
-uint8_t pop(struct RingBuffer* ringBuff);
-Capacity buff_capacity(const struct RingBuffer* ringBuff);
+void Push(struct RingBuffer* ringBuff, uint8_t data);
+uint8_t Pop(struct RingBuffer* ringBuff);
+Capacity BuffCapacity(const struct RingBuffer* ringBuff);
 
 void PushTest(uint8_t* data);
 uint8_t PopTest();
-void reset_buffer();
+void ResetBuffer();
 
 /* Testing some interfaces */
 typedef void (*IPush)(struct RingBuffer*, uint8_t);
@@ -41,8 +41,8 @@ typedef void (*IResetBuffer)(void);
 
 typedef struct
 {
-    TestPush push;
-    TestPop pop;
+    TestPush Push;
+    TestPop Pop;
     IResetBuffer ResetBuffer;
 
     struct RingBuffer* buffer;

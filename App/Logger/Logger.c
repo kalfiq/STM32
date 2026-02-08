@@ -1,4 +1,4 @@
-#include "logger.h"
+#include "Logger.h"
 
 char append_to_string(uint8_t* source, uint8_t new_char) {
     if (NULL == source)
@@ -27,7 +27,7 @@ void push_ring_buffer(const uint8_t* msg) {
 
     /* Consider decoupling this for portability */
     while (*msg)
-        push(&ring_buff, *msg++);
+        Push(&ring_buff, *msg++);
 }
 
 uint8_t is_format_specifier(const uint8_t* format) {
@@ -88,7 +88,7 @@ void custom_log(const uint8_t* function, const uint8_t* format, ...) {
             append_to_string(msg, *num_buff_ptr++);
     }
 
-    ringBuffer.push(msg);
+    ringBuffer.Push(msg);
 
     va_end(args);
 }
