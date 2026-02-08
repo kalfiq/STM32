@@ -3,7 +3,8 @@
 
 /* Reference link: https://www.linkedin.com/pulse/stm32-clock-configuration-bare-metal-deep-dive-gheorghe-prelipcean-9jivf */
 
-static inline void ResetRcc() {
+static inline void ResetRcc()
+{
     /* HSI on and default trim */
     SET_BIT(RCC_CR, HSI_ON);
     while (!CHECK_BIT(RCC_CR, HSI_RDY));
@@ -23,29 +24,35 @@ static inline void ResetRcc() {
 
 }
 
-static inline void SetVoltage() {
+static inline void SetVoltage()
+{
 
 }
 
-static inline void SetFlashLatency() {
+static inline void SetFlashLatency()
+{
     /* 1. Insert wait states to allow sufficient time for FLASH to fetch next instruction
      * 2. Enable instuction cache, data cache, and pre-fetch buffer for optimizing performance */
 
 }
 
-static inline void StartHSE() {
+static inline void StartHSE()
+{
 
 }
 
-static inline void ConfigurePLL() {
+static inline void ConfigurePLL()
+{
 
 }
 
-static inline void SwitchToSysClk() {
+static inline void SwitchToSysClk()
+{
 
 }
 
-static inline void ConfigureMCO1() {
+static inline void ConfigureMCO1()
+{
     ClockSetHSESource();
 
     ClockEnablePortxClock(GPIOA_CLOCK);
@@ -65,7 +72,8 @@ static inline void ConfigureMCO1() {
     ClockSetMCO1Output();
 }
 
-void SystemInit() {
+void SystemInit()
+{
    /* This is the general sequence for setting up the clock */
     //ResetRcc();
 //    SetVoltage();

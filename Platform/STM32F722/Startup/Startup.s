@@ -15,7 +15,7 @@
 .weak ResetHandler             /* Allow for overridng with custom implementation */
 .type ResetHandler, %function  /* Define this symbol as a function */
 
-.extern main
+.extern Main
 
 /* There could be multiple sources of reset.
  * Check chapter 5.1.1 of the user manual for more info */
@@ -37,7 +37,7 @@ ResetHandler:
 
   bl SystemInit /* Defined in SystemInit.c */
 
-  bl  main
+  bl  Main
   bx  lr
 
 .size ResetHandler, .-ResetHandler

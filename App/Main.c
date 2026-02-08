@@ -1,4 +1,5 @@
-int main(void) {
+int Main(void)
+{
     while (1);
 
     return 0;
